@@ -16,15 +16,13 @@
 package org.springframework.samples.petclinic.vets.web;
 
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.vets.model.Vet;
 import org.springframework.samples.petclinic.vets.model.VetRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Juergen Hoeller
@@ -45,4 +43,34 @@ class VetResource {
     public List<Vet> showResourcesVetList() {
         return vetRepository.findAll();
     }
+
+    @DeleteMapping("/delete/{vetsId}")
+    public void deleteVet(@PathVariable("vetsId") int id) {
+        vetRepository.deleteById(id);
+    }
+
+    @GetMapping("/vets/{vetsId}")
+    public Vet showVet(@PathVariable("vetsId") int id) throws Exception {
+        return vetRepository.findById(id).orElseThrow(() -> new Exception("Vet " + id + " not found"));
+    }
+
+    @PostMapping("/Add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Vet addVet(@RequestBody VetRequest vetRequest) {
+        Vet vet = new Vet();
+        vet.setFirstName(vetRequest.firstName());
+        vet.setLastName(vetRequest.lastName());
+        return vetRepository.save(vet);
+    }
+
+    @PostMapping("/Update/{vetsId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateVet(@RequestBody VetRequest vetRequest, @PathVariable("vetsId") int id) {
+        Vet vet = vetRepository.findById(id).orElseThrow(() -> new RuntimeException("Vet " + id + " not found"));
+        vet.setFirstName(vetRequest.firstName());
+        vet.setLastName(vetRequest.lastName());
+        vetRepository.save(vet);
+    }
+
+
 }
