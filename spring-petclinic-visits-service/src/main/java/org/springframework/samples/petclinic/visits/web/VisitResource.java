@@ -26,13 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.visits.model.Visit;
 import org.springframework.samples.petclinic.visits.model.VisitRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Juergen Hoeller
@@ -45,31 +39,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/visits")
 @Timed("petclinic.visit")
 class VisitResource {
 
     private final VisitRepository visitRepository;
 
-    @PostMapping("owners/*/pets/{petId}/visits")
+    @PostMapping("/visits/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public Visit create(
-        @Valid @RequestBody Visit visit,
-        @PathVariable("petId") @Min(1) int petId) {
-
-        visit.setPetId(petId);
-        log.info("Saving visit {}", visit);
+    public Visit create(@Valid @RequestBody Visit visit) {
         return visitRepository.save(visit);
     }
 
-    @GetMapping("owners/*/pets/{petId}/visits")
-    public List<Visit> read(@PathVariable("petId") @Min(1) int petId) {
-        return visitRepository.findByPetId(petId);
+    @PostMapping("/visits/update/{visitId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@Valid @RequestBody Visit visit, @PathVariable("visitId") @Min(1) int visitId) {
+        visit.setId(visitId);
+        visitRepository.save(visit);
     }
 
-    @GetMapping("pets/visits")
-    public Visits read(@RequestParam("petId") List<Integer> petIds) {
-        final List<Visit> byPetIdIn = visitRepository.findByPetIdIn(petIds);
-        return new Visits(byPetIdIn);
+    @DeleteMapping("/visits/{visitId}")
+    public void delete(@PathVariable("visitId") @Min(1) int visitId) {
+        visitRepository.deleteById(visitId);
+    }
+
+    @GetMapping("/pets/visits/{petId}")
+    public Visits readID(@PathVariable("petId") @Min(1) int petId) {
+        return new Visits(visitRepository.findByPetId(petId));
+    }
+
+    @GetMapping("/visits")
+    public Visits read() {
+        final List<Visit> allVisits = visitRepository.findAll();
+        return new Visits(allVisits);
     }
 
     @Value

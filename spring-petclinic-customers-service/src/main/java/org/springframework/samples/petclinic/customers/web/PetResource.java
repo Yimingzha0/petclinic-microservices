@@ -35,12 +35,19 @@ import java.util.List;
 @RestController
 @Timed("petclinic.pet")
 @RequiredArgsConstructor
+@RequestMapping("/petApi")
 @Slf4j
 class PetResource {
 
     private final PetRepository petRepository;
     private final OwnerRepository ownerRepository;
 
+
+    @DeleteMapping("/delete/{Id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePet(@PathVariable("Id") int Id) {
+        petRepository.deleteById(Id);
+    }
 
     @GetMapping("/petTypes")
     public List<PetType> getPetTypes() {
@@ -59,14 +66,6 @@ class PetResource {
         final Pet pet = new Pet();
         owner.addPet(pet);
         return save(pet, petRequest);
-    }
-
-    @PutMapping("/owners/*/pets/{petId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void processUpdateForm(@RequestBody PetRequest petRequest) {
-        int petId = petRequest.id();
-        Pet pet = findPetById(petId);
-        save(pet, petRequest);
     }
 
     private Pet save(final Pet pet, final PetRequest petRequest) {
@@ -91,6 +90,11 @@ class PetResource {
     private Pet findPetById(int petId) {
         return petRepository.findById(petId)
             .orElseThrow(() -> new ResourceNotFoundException("Pet " + petId + " not found"));
+    }
+
+    @GetMapping("/owners/allPets")
+    public List<Pet> findAllPets() {
+        return petRepository.findAll();
     }
 
 }
