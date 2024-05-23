@@ -13,32 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.customers.web;
+package org.springframework.samples.petclinic.pets.web;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.petclinic.customers.model.Pet;
-import org.springframework.samples.petclinic.customers.model.PetType;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
 /**
  * @author mszarlinski@bravurasolutions.com on 2016-12-05.
  */
-
-record PetDetails(
-
-    long id,
-
-    String name,
-
-    String owner,
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    Date birthDate,
-
-    PetType type
+record PetRequest(int id,
+                  @JsonFormat(pattern = "yyyy-MM-dd")
+                  Date birthDate,
+                  @Size(min = 1)
+                  String name,
+                  int typeId
 ) {
-    public PetDetails(Pet pet) {
-        this(pet.getId(), pet.getName(), pet.getOwner().getFirstName() + " " + pet.getOwner().getLastName(), pet.getBirthDate(), pet.getType());
-    }
+
 }

@@ -13,24 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.customers.model;
-
-import java.util.Date;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+package org.springframework.samples.petclinic.pets.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 import org.springframework.core.style.ToStringCreator;
+
+import java.util.Date;
 
 /**
  * Simple business object representing a pet.
@@ -60,10 +51,8 @@ public class Pet {
     @JoinColumn(name = "type_id")
     private PetType type;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    @JsonIgnore
-    private Owner owner;
+    @Column(name = "owner_id")
+    private Integer owner;
 
     @Override
     public String toString() {
@@ -72,8 +61,6 @@ public class Pet {
             .append("name", this.getName())
             .append("birthDate", this.getBirthDate())
             .append("type", this.getType().getName())
-            .append("ownerFirstname", this.getOwner().getFirstName())
-            .append("ownerLastname", this.getOwner().getLastName())
             .toString();
     }
 

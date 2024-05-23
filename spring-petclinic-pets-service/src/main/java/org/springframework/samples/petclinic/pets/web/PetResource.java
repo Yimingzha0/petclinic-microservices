@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.customers.web;
+package org.springframework.samples.petclinic.pets.web;
 
 import io.micrometer.core.annotation.Timed;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.samples.petclinic.customers.model.*;
+import org.springframework.samples.petclinic.pets.model.Owner;
+import org.springframework.samples.petclinic.pets.model.Pet;
+import org.springframework.samples.petclinic.pets.model.PetRepository;
+import org.springframework.samples.petclinic.pets.model.PetType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +34,7 @@ import java.util.List;
  * @author Arjen Poutsma
  * @author Maciej Szarlinski
  * @author Ramazan Sakin
+ * @author zhaoyiming
  */
 @RestController
 @Timed("petclinic.pet")
@@ -40,7 +44,6 @@ import java.util.List;
 class PetResource {
 
     private final PetRepository petRepository;
-    private final OwnerRepository ownerRepository;
 
 
     @DeleteMapping("/delete/{Id}")
@@ -59,12 +62,8 @@ class PetResource {
     public Pet processCreationForm(
         @RequestBody PetRequest petRequest,
         @PathVariable("ownerId") @Min(1) int ownerId) {
-
-        Owner owner = ownerRepository.findById(ownerId)
-            .orElseThrow(() -> new ResourceNotFoundException("Owner " + ownerId + " not found"));
-
         final Pet pet = new Pet();
-        owner.addPet(pet);
+        pet.setOwner(ownerId);
         return save(pet, petRequest);
     }
 
