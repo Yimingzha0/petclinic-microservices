@@ -1,8 +1,9 @@
 #!/bin/bash
-docker push ${REPOSITORY_PREFIX}/spring-petclinic-config-server:${VERSION}
-docker push ${REPOSITORY_PREFIX}/spring-petclinic-discovery-server:${VERSION}
-docker push ${REPOSITORY_PREFIX}/spring-petclinic-api-gateway:${VERSION}
-docker push ${REPOSITORY_PREFIX}/spring-petclinic-visits-service:${VERSION}
-docker push ${REPOSITORY_PREFIX}/spring-petclinic-vets-service:${VERSION}
-docker push ${REPOSITORY_PREFIX}/spring-petclinic-customers-service:${VERSION}
-docker push ${REPOSITORY_PREFIX}/spring-petclinic-admin-server:${VERSION}
+docker push ${NAMESPACE}/spring-petclinic-config-server:${TAG}
+docker push ${NAMESPACE}/spring-petclinic-discovery-server:${TAG}
+docker push ${NAMESPACE}/spring-petclinic-api-gateway:${TAG}
+docker push ${NAMESPACE}/spring-petclinic-visits-service:${TAG}
+docker push ${NAMESPACE}/spring-petclinic-vets-service:${TAG}
+docker push ${NAMESPACE}/spring-petclinic-customers-service:${TAG}
+docker push ${NAMESPACE}/spring-petclinic-admin-server:${TAG}
+docker push ${NAMESPACE}/spring-petclinic-pets-service:${TAG}

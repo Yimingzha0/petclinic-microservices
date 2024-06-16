@@ -2,7 +2,7 @@ version: '3'
 
 services:
   config-server:
-    image: springcommunity/spring-petclinic-config-server
+    image: ${NAMESPACE}/spring-petclinic-config-server:${TAG}
     container_name: config-server
     deploy:
       resources:
@@ -17,7 +17,7 @@ services:
      - 8888:8888
 
   discovery-server:
-    image: springcommunity/spring-petclinic-discovery-server
+    image: ${NAMESPACE}/spring-petclinic-discovery-server:${TAG}
     container_name: discovery-server
     deploy:
       resources:
@@ -35,7 +35,7 @@ services:
      - 8761:8761
 
   customers-service:
-    image: springcommunity/spring-petclinic-customers-service
+    image: ${NAMESPACE}/spring-petclinic-customers-service:${TAG}
     container_name: customers-service
     deploy:
       resources:
@@ -50,7 +50,7 @@ services:
     - 8081:8081
 
   visits-service:
-    image: springcommunity/spring-petclinic-visits-service
+    image: ${NAMESPACE}/spring-petclinic-visits-service:${TAG}
     container_name: visits-service
     deploy:
       resources:
@@ -65,7 +65,7 @@ services:
      - 8082:8082
 
   pets-service:
-    image: springcommunity/spring-petclinic-pets-service
+    image: ${NAMESPACE}/spring-petclinic-pets-service:${TAG}
     container_name: pets-service
     deploy:
       resources:
@@ -80,7 +80,7 @@ services:
       - 8084:8084
 
   vets-service:
-    image: springcommunity/spring-petclinic-vets-service
+    image: ${NAMESPACE}/spring-petclinic-vets-service:${TAG}
     container_name: vets-service
     deploy:
       resources:
@@ -95,7 +95,7 @@ services:
      - 8083:8083
 
   api-gateway:
-    image: springcommunity/spring-petclinic-api-gateway
+    image: ${NAMESPACE}/spring-petclinic-api-gateway:${TAG}
     container_name: api-gateway
     deploy:
       resources:
@@ -122,7 +122,7 @@ services:
      - 9411:9411
 
   admin-server:
-    image: springcommunity/spring-petclinic-admin-server
+    image: ${NAMESPACE}/spring-petclinic-admin-server:${TAG}
     container_name: admin-server
     deploy:
       resources:
@@ -136,24 +136,3 @@ services:
     ports:
      - 9090:9090
 
-  ## Grafana / Prometheus
-
-  grafana-server:
-    build: ./docker/grafana
-    container_name: grafana-server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-    ports:
-    - 3000:3000
-
-  prometheus-server:
-    build: ./docker/prometheus
-    container_name: prometheus-server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-    ports:
-    - 9091:9090
