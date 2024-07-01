@@ -2,7 +2,7 @@ version: '3'
 
 services:
   config-server:
-    image: springcommunity/spring-petclinic-config-server
+    image: yimingzha0/spring-petclinic-config-server
     container_name: config-server
     deploy:
       resources:
@@ -17,7 +17,7 @@ services:
      - 8888:8888
 
   discovery-server:
-    image: springcommunity/spring-petclinic-discovery-server
+    image: yimingzha0/spring-petclinic-discovery-server
     container_name: discovery-server
     deploy:
       resources:
@@ -35,7 +35,7 @@ services:
      - 8761:8761
 
   customers-service:
-    image: springcommunity/spring-petclinic-customers-service
+    image: yimingzha0/spring-petclinic-customers-service:0.3.0
     container_name: customers-service
     deploy:
       resources:
@@ -49,23 +49,8 @@ services:
     ports:
     - 8081:8081
 
-  vets-service:
-    image: springcommunity/spring-petclinic-vets-service
-    container_name: vets-service
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-    depends_on:
-      config-server:
-        condition: service_healthy
-      discovery-server:
-        condition: service_healthy
-    ports:
-     - 8083:8083
-
   api-gateway:
-    image: springcommunity/spring-petclinic-api-gateway
+    image: yimingzha0/spring-petclinic-api-gateway
     container_name: api-gateway
     deploy:
       resources:
@@ -92,7 +77,7 @@ services:
      - 9411:9411
 
   admin-server:
-    image: springcommunity/spring-petclinic-admin-server
+    image: yimingzha0/spring-petclinic-admin-server
     container_name: admin-server
     deploy:
       resources:
@@ -105,25 +90,3 @@ services:
         condition: service_healthy
     ports:
      - 9090:9090
-
-  ## Grafana / Prometheus
-
-  grafana-server:
-    build: ./docker/grafana
-    container_name: grafana-server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-    ports:
-    - 3000:3000
-
-  prometheus-server:
-    build: ./docker/prometheus
-    container_name: prometheus-server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-    ports:
-    - 9091:9090
