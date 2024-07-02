@@ -35,7 +35,7 @@ services:
      - 8761:8761
 
   customers-service:
-    image: yimingzha0/spring-petclinic-customers-service:${TAG}
+    image: yimingzha0/spring-petclinic-customers-service:0.2.0
     container_name: customers-service
     deploy:
       resources:
@@ -50,7 +50,7 @@ services:
     - 8081:8081
 
   vets-service:
-    image: yimingzha0/spring-petclinic-vets-service:${TAG}
+    image: yimingzha0/spring-petclinic-vets-service:0.2.0
     container_name: vets-service
     deploy:
       resources:
